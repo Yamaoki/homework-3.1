@@ -1,10 +1,14 @@
 package ru.hogwarts.school.model;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
-
+@Entity
+@Table(name = "Факультет")
 public class Faculty {
-
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name, color;
 
     public Faculty() {

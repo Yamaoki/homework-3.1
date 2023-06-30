@@ -3,16 +3,16 @@ package ru.hogwarts.school.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
-@RequestMapping("/faculty")
+@RequestMapping("faculty")
 public class FacultyController {
-
     private final FacultyService facultyService;
-
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
     }
@@ -43,4 +43,14 @@ public class FacultyController {
         Faculty deletedFaculty = facultyService.deleteFacultyById(id);
         return ResponseEntity.ok(deletedFaculty);
     }
+    @GetMapping("/filter") // GET http://localhost:8080/faculty/filter?color=red&name=1
+    public ResponseEntity<List<Faculty>> getFacultiesByColorOrName(@RequestParam(required = false) String color,@RequestParam(required = false) String name) {
+        return ResponseEntity.ok(facultyService.getFacultiesByColorOrName(color, name));
+    }
+
+    @GetMapping("{id}/students") // GET http://localhost:8080/faculty/1/students
+    public ResponseEntity<List<Student>> getStudentsByFacultyId(@PathVariable Long id){
+        return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
+    }
+
 }

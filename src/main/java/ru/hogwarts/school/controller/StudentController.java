@@ -1,18 +1,17 @@
 package ru.hogwarts.school.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("student")
 public class StudentController {
-
     private final StudentService studentService;
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -44,4 +43,15 @@ public class StudentController {
         Student deletedStudent = studentService.deleteStudentById(id);
         return ResponseEntity.ok(deletedStudent);
     }
+
+    @GetMapping("/filter") // GET http://localhost:8080/student/filter?ageFrom=18&ageTo=25
+    public ResponseEntity<List<Student>> getStudentsByAgeBetween(@RequestParam int ageFrom, @RequestParam int ageTo){
+        return ResponseEntity.ok(studentService.getStudentsByAgeBetween(ageFrom,ageTo));
+    }
+
+    @GetMapping("{id}/faculty") // GET http://localhost:8080/student/1/faculty
+    public ResponseEntity<Faculty> getFacultyByStudentId(@PathVariable Long id){
+        return ResponseEntity.ok(studentService.getFacultyByStudentId(id));
+    }
+
 }

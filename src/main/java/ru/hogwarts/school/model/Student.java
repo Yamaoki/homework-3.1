@@ -17,8 +17,16 @@ public class Student {
     private Faculty faculty;
 
 
-    public Student() {
+    public Student(Long id) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
     }
+
+    public Student() {
+
+    }
+
     public Long getId() {
         return id;
     }

@@ -15,7 +15,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -38,7 +37,7 @@ public class StudentService {
 
     public Student updateStudent(Long id, Student student) {
         studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
-        Student oldStudent = new Student();
+        Student oldStudent = new Student(id);
         oldStudent.setId(id);
         oldStudent.setAge(student.getAge());
         oldStudent.setName(student.getName());
@@ -59,31 +58,32 @@ public class StudentService {
     }
     public Student getStudentInfo(Long id) {
         studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
-        Student student = new Student();
+        Student student = new Student(id);
         student.getId();
         student.getAge();
         student.getName();
         return student;
     }
-    public Avatar findAvatar(long studentId) {
-        return avatarRepository.findByStudentId(studentId).orElseThrow();
+    public Avatar findAvatar(long id) {
+        return avatarRepository.findByStudentId(id).orElseThrow();
     }
 
-    public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
-        Student student = getStudentById(studentId);
-        Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+    public void uploadAvatar(Long id, MultipartFile file) throws IOException {
+        Student student = findStudent(id);
+
+        Path filePath = Path.of(avatarsDir, id + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
         try (InputStream is = file.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
         ) {
             bis.transferTo(bos);
         }
 
-        Avatar avatar = avatarRepository.findByStudentId(studentId).orElseGet(Avatar::new);
+        Avatar avatar = avatarRepository.findByStudentId(id).orElseGet(Avatar::new);
         avatar.setStudent(student);
         avatar.setFilePath(filePath.toString());
         avatar.setFileSize(file.getSize());
@@ -91,6 +91,10 @@ public class StudentService {
         avatar.setData(file.getBytes());
 
         avatarRepository.save(avatar);
+    }
+
+    private Student findStudent(Long id) {
+        return studentRepository.findById(id).orElseThrow();
     }
 
     private String getExtension(String fileName) {

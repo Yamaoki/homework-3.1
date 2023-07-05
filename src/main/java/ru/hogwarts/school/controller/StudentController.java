@@ -1,6 +1,8 @@
 package ru.hogwarts.school.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +11,6 @@ import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student")
-public class StudentController {
+public final class StudentController {
 
     private final StudentService studentService;
 

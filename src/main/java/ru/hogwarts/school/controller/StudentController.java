@@ -69,12 +69,12 @@ public final class StudentController {
 
 
     @PostMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar(@PathVariable Long id, @RequestParam MultipartFile avatar) throws IOException {
+    public ResponseEntity<String> uploadAvatar(@PathVariable Long id, @RequestParam MultipartFile avatar) {
         if (avatar.getSize() > 1024 * 300) {
             return ResponseEntity.badRequest().body("File is too big");
         }
 
-        studentService.uploadAvatar(id, avatar);
+        studentService.findAvatar(id);
         return ResponseEntity.ok().build();
     }
 
@@ -111,5 +111,19 @@ public final class StudentController {
     @GetMapping("{id}/faculty")
     public ResponseEntity<Faculty> getFacultyByStudentId(@PathVariable Long id){
         return ResponseEntity.ok(studentService.getFacultyByStudentId(id));
+    }
+    @GetMapping("/amount")
+    public ResponseEntity<Integer> getStudentsAmount() {
+        return ResponseEntity.ok(studentService.getStudentsAmount());
+    }
+
+    @GetMapping("/averageAge")
+    public ResponseEntity<Integer> getStudentsAverageAge() {
+        return ResponseEntity.ok(studentService.getStudentsAverageAge());
+    }
+
+    @GetMapping("/lastFive")
+    public ResponseEntity<List<Student>> getStudentsLastFive() {
+        return ResponseEntity.ok(studentService.getStudentsLastFive());
     }
 }

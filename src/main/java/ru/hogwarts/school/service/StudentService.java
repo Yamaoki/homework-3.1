@@ -1,6 +1,5 @@
 package ru.hogwarts.school.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
@@ -14,8 +13,6 @@ import java.util.List;
 
 @Service
 public class StudentService {
-    @Value("${avatars.dir.path}")
-    private String avatarsDir;
     private final StudentRepository studentRepository;
     private final AvatarRepository avatarRepository;
     public StudentService(StudentRepository studentRepository, AvatarRepository avatarRepository) {

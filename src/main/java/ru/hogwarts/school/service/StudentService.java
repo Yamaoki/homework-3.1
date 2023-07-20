@@ -11,7 +11,9 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class StudentService {
@@ -29,6 +31,10 @@ public class StudentService {
     public Student getStudentById(Long id) {
         logger.info("Was invoked method for find student by id");
         return studentRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
+    }
+    public Collection<Student> getAllStudents() {
+        logger.info("Was invoked method for find all students");
+        return studentRepository.findAll();
     }
 
     public Student updateStudent(Long id, Student student) {
@@ -83,5 +89,23 @@ public class StudentService {
     public List<Student> getStudentsLastFive() {
         logger.info("Was invoked method for get five last students");
         return studentRepository.getStudentsLastFive();
+    }
+    public Collection<String> getAllStudentsStartingLetterA() {
+        logger.info("Was invoked method for get all student names, starting letter A");
+        Collection<Student> students = this.getAllStudents();
+        return students.stream()
+                .map(e -> e.getName().toUpperCase(Locale.ROOT))
+                .filter(e -> e.startsWith("A"))
+                .sorted()
+                .toList();
+    }
+
+    public Double getAverageAge() {
+        logger.info("Was invoked method for get average age for all students");
+        Collection<Student> students = this.getAllStudents();
+        return students.stream()
+                .mapToInt(e -> e.getAge())
+                .average()
+                .orElse(0);
     }
 }

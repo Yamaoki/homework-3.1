@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,7 +47,6 @@ public final class StudentController {
         }
         return ResponseEntity.ok((Student) Collections.emptyList());
     }
-
     @PostMapping
     public Student createStudent(@RequestBody Student student) {
         return studentService.addStudent(student);
@@ -125,5 +125,16 @@ public final class StudentController {
     @GetMapping("/lastFive")
     public ResponseEntity<List<Student>> getStudentsLastFive() {
         return ResponseEntity.ok(studentService.getStudentsLastFive());
+    }
+    @GetMapping("all-starting-A")
+    public ResponseEntity<Collection<String>> getAllStudentsStartingLetterA() {
+        Collection<String> studentNames = studentService.getAllStudentsStartingLetterA();
+        return ResponseEntity.ok(studentNames);
+    }
+
+    @GetMapping("average-age-stream")
+    public ResponseEntity<Double> getAverageAge() {
+        Double averageAge = studentService.getAverageAge();
+        return ResponseEntity.ok(averageAge);
     }
 }

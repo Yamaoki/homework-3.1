@@ -137,4 +137,12 @@ public final class StudentController {
         Double averageAge = studentService.getAverageAge();
         return ResponseEntity.ok(averageAge);
     }
+    @GetMapping("print-students-thread")
+    public void printFewStudentsInThreads() {
+        studentService.printFewStudentsThreads();
+    }
+    @GetMapping("print-students-thread-sync")
+    public void printFewStudentsInThreadsSync() {
+        studentService.printFewStudentsThreadsSync();
+    }
 }

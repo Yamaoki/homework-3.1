@@ -142,33 +142,23 @@ public class StudentService {
         List<Student> students = new ArrayList<>(this.getAllStudents());
 
         Thread thread1 = new Thread(() -> {
-            printStudentSync(students, "Поток 1", 2);
-            printStudentSync(students, "Поток 1", 3);
+            printStudentSync(students, "Поток 1");
+            printStudentSync(students, "Поток 1");
         });
         thread1.start();
 
         Thread thread2 = new Thread(() -> {
-            printStudentSync(students, "Поток 2", 4);
-            printStudentSync(students, "Поток 2", 5);
+            printStudentSync(students, "Поток 2");
+            printStudentSync(students, "Поток 2");
         });
         thread2.start();
 
-        printStudentSync(students, "Поток 0", 0);
-        printStudentSync(students, "Поток 0", 1);
+        printStudentSync(students, "Поток 0");
+        printStudentSync(students, "Поток 0");
     }
 
-    private void printStudentSync(List<Student> students, String message, int number) {
-        while (currentStudent != number) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        synchronized (currentStudent) {
-            System.out.println(message + ": #" + number + ": " + students.get(number).getName());
-            currentStudent++;
-        }
+    private synchronized void printStudentSync(List<Student> students, String message) {
+        System.out.println(message + ": #" + currentStudent + ": " + students.get(currentStudent).getName());
+        currentStudent++;
     }
 }
